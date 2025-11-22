@@ -1,0 +1,9 @@
+/* App specific styles if needed, otherwise empty to avoid conflicts */
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  font-size: 1.2rem;
+  color: var(--text-secondary);
+}

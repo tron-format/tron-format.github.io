@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <rect width="256" height="256" rx="128" fill="#0d254e" />
+  <!-- Class Definition (Header) -->
+  <rect x="48" y="48" width="160" height="40" rx="12" fill="white" />
+  <!-- Data Instances -->
+  <rect x="100" y="96" width="56" height="36" rx="6" fill="white" />
+  <rect x="100" y="140" width="56" height="36" rx="6" fill="white" />
+  <rect x="100" y="184" width="56" height="36" rx="6" fill="white" />
+</svg>
