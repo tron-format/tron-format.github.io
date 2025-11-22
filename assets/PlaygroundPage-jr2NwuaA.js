@@ -1,0 +1,1 @@
+import{l as r}from"./vendor-markdown-0Lbspi3Y.js";import{c as s}from"./index-D3rpah_1.js";const m=()=>{const e=s.c(1);let o;return e[0]===Symbol.for("react.memo_cache_sentinel")?(o=r.jsxs("div",{className:"markdown-body",children:[r.jsx("h1",{children:"Playground"}),r.jsx("p",{children:"Coming soon..."})]}),e[0]=o):o=e[0],o};export{m as PlaygroundPage};
