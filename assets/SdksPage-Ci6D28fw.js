@@ -1,0 +1,14 @@
+import{k as j,l as e}from"./vendor-markdown-0Lbspi3Y.js";import{c as x}from"./index-CezHzl7T.js";import{H as f,j as g,b as u}from"./vendor-rehype-BLgafxBa.js";/* empty css                  */f.registerLanguage("javascript",g);f.registerLanguage("bash",u);const _=()=>{const r=x.c(10);let t;r[0]===Symbol.for("react.memo_cache_sentinel")?(t=[],r[0]=t):t=r[0];const m=j.useRef(t);let s,n;r[1]===Symbol.for("react.memo_cache_sentinel")?(s=()=>{m.current.forEach(b)},n=[],r[1]=s,r[2]=n):(s=r[1],n=r[2]),j.useEffect(s,n);let a,i;r[3]===Symbol.for("react.memo_cache_sentinel")?(a=e.jsx("h1",{children:"SDKs"}),i=e.jsx("p",{children:"Official TRON SDKs for working with the Token Reduced Object Notation format."}),r[3]=a,r[4]=i):(a=r[3],i=r[4]);let c,o,l,h;r[5]===Symbol.for("react.memo_cache_sentinel")?(c=e.jsxs("div",{className:"toc",children:[e.jsx("h4",{children:"Contents"}),e.jsxs("ul",{children:[e.jsxs("li",{children:[e.jsx("a",{href:"#available-sdks",children:"Available SDKs"}),e.jsx("ul",{children:e.jsx("li",{children:e.jsx("a",{href:"#javascript-typescript",children:"JavaScript / TypeScript"})})})]}),e.jsx("li",{children:e.jsx("a",{href:"#upcoming-support",children:"Upcoming Support"})})]})]}),o=e.jsx("h2",{id:"available-sdks",children:"Available SDKs"}),l=e.jsx("h3",{id:"javascript-typescript",children:"JavaScript / TypeScript"}),h=e.jsx("p",{children:"The official JavaScript library for converting data to and from the TRON format."}),r[5]=c,r[6]=o,r[7]=l,r[8]=h):(c=r[5],o=r[6],l=r[7],h=r[8]);let p;return r[9]===Symbol.for("react.memo_cache_sentinel")?(p=e.jsxs("div",{className:"markdown-body",children:[a,i,c,o,l,h,e.jsxs("p",{className:"sdk-links",children:[e.jsx("a",{href:"https://github.com/tron-format/tron-javascript",target:"_blank",rel:"noopener noreferrer",children:"GitHub Repository"}),e.jsx("span",{className:"link-separator",children:"·"}),e.jsx("a",{href:"https://www.npmjs.com/package/@tron-format/tron",target:"_blank",rel:"noopener noreferrer",children:"npm Package"})]}),e.jsx("h4",{children:"Installation"}),e.jsx("pre",{children:e.jsx("code",{ref:d=>{m.current[0]=d},className:"language-bash",children:"npm i @tron-format/tron"})}),e.jsx("h4",{children:"Usage"}),e.jsx("pre",{children:e.jsx("code",{ref:d=>{m.current[1]=d},className:"language-javascript",children:`import { TRON } from '@tron-format/tron';
+
+const value = { a: 1, b: 2 };
+const tron = TRON.stringify(value);
+console.log(tron);
+// Output: 
+// class Object1: a,b
+// 
+// Object1(1,2)
+
+const parsed = TRON.parse(tron);
+console.log(parsed);
+// Output:
+// { a: 1, b: 2 }`})}),e.jsx("h2",{id:"upcoming-support",children:"Upcoming Support"}),e.jsx("ul",{children:e.jsxs("li",{children:[e.jsx("strong",{children:"Python"}),": Coming soon"]})})]}),r[9]=p):p=r[9],p};function b(r){r&&!r.dataset.highlighted&&f.highlightElement(r)}export{_ as SdksPage};
