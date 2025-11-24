@@ -101,6 +101,15 @@ A typical class definition has the following form.
 class ClassName: property1,property2,...
 ```
 
+Class definitions can also have this form.
+
+```python
+class ClassName:
+  property1
+  property2
+  ...
+```
+
 *   **Class Names**:
     *   Must be alphanumeric.
     *   Cannot start with a number.
@@ -111,11 +120,13 @@ class ClassName: property1,property2,...
     *   The space following the semicolon is optional.
     *   A semicolon at the end of the class definition is optional, unless followed by another class definition or the data section in the same line.
 
+At least one property name must be specified. Creating a class with no properties is not supported.
+
 ### Property Lists
 
 Properties within a class definition can be separated by:
 *   Commas `,`
-*   Newlines (must use consistent indentation)
+*   Newlines (with consistent indentation)
 
 Trailing commas are optional.
 
@@ -184,6 +195,7 @@ ClassName(value1, value2, ...)
 
 *   The number of arguments must match the number of properties in the class definition.
 *   The order of arguments corresponds to the order of properties.
+*   Creating an empty object using class instantiation is not possible.
 
 **Example:**
 
@@ -228,5 +240,9 @@ Unlike JSON, TRON allows an optional trailing comma after the last item in:
 Whitespace is generally insignificant, except:
 *   The space following the `class` keyword.
 *   In strings.
-*   Newline is significant if a semicolon is not used to separate class definitions or the header and data sections.
-*   Indentation is significant for newline-separated property lists in class definitions.
+*   When newline is significant under the following conditions:
+    * a semicolon is not used to separate class definitions.
+    * a comma is not used to separate the property names of the class.
+    * a semicolon is not used to separate the header and data sections.
+
+When separating property names with newlines, it is strongly recommended to use consistent indentation for readability. However, identation is not required since a property and a class instantiated object can be differentiated based on whether the unquoted indentifier is followed by a left bracket.

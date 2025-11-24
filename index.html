@@ -4,7 +4,25 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/logo/favicon.svg?" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
     <title>TRON Format</title>
+    <!-- Inline script to prevent flash of wrong theme -->
+    <script>
+      (function() {
+        var theme = localStorage.getItem('theme');
+        if (!theme) {
+          theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+        document.documentElement.classList.add(theme);
+        // Set immediate background to prevent flash
+        document.documentElement.style.backgroundColor = theme === 'dark' ? '#0f172a' : '#ffffff';
+      })();
+    </script>
+    <style>
+      /* Critical CSS to prevent flash */
+      html { background-color: #ffffff; }
+      html.dark { background-color: #0f172a; }
+    </style>
   </head>
   <body>
     <div id="root"></div>

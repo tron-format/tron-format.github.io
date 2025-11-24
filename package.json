@@ -11,7 +11,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@toon-format/toon": "^2.0.0",
+    "@tron-format/tron": "^0.1.1",
     "highlight.js": "^11.11.1",
+    "js-tiktoken": "^1.0.21",
     "lucide-react": "^0.554.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
@@ -19,7 +22,8 @@
     "react-router-dom": "^7.9.6",
     "rehype-highlight": "^7.0.2",
     "rehype-raw": "^7.0.0",
-    "remark-gfm": "^4.0.1"
+    "remark-gfm": "^4.0.1",
+    "yaml": "^2.8.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",

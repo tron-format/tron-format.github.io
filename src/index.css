@@ -10,6 +10,11 @@
   --code-bg: #f6f8fa;
   --nav-bg: rgba(255, 255, 255, 0.9);
   --nav-border: rgba(0, 0, 0, 0.1);
+  --copy-success-bg: #dcfce7;
+  --copy-success-color: #166534;
+  --dropdown-bg: #eef2f6;
+  --dropdown-item-hover: #e2e8f0;
+  --dropdown-item-active: #dce4ec;
 
   color: var(--text-color);
   background-color: var(--bg-color);
@@ -28,6 +33,11 @@
   --code-bg: #0d1117;
   --nav-bg: rgba(15, 23, 42, 0.9);
   --nav-border: rgba(255, 255, 255, 0.1);
+  --copy-success-bg: #166534;
+  --copy-success-color: #dcfce7;
+  --dropdown-bg: #1e293b;
+  --dropdown-item-hover: #334155;
+  --dropdown-item-active: #3b4a5f;
 }
 
 body {
@@ -45,17 +55,20 @@ body {
 
 /* Markdown Styles */
 .markdown-body {
-  max-width: 800px;
+  max-width: 1000px;
   margin: 0 auto;
   padding: 0 1rem;
+  padding-bottom: 2rem;
 }
 
 .markdown-body h1,
 .markdown-body h2,
-.markdown-body h3 {
+.markdown-body h3,
+.markdown-body h4 {
   color: var(--text-color);
   margin-top: 2rem;
   margin-bottom: 1rem;
+  scroll-margin-top: 5rem;
 }
 
 .markdown-body h1 { font-size: 2.5rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; }
@@ -85,6 +98,63 @@ body {
 .markdown-body pre code {
   background-color: transparent;
   padding: 0;
+}
+
+.markdown-body a {
+  color: var(--primary-color);
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+
+.markdown-body a:hover {
+  text-decoration: underline;
+  opacity: 0.85;
+}
+
+.markdown-body .sdk-links {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.markdown-body .sdk-links a {
+  font-weight: 500;
+}
+
+.markdown-body .link-separator {
+  color: var(--text-color);
+  opacity: 0.5;
+}
+
+.markdown-body .toc {
+  background-color: var(--code-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 1rem 1.5rem;
+  margin: 1.5rem 0;
+  width: fit-content;
+}
+
+.markdown-body .toc h4 {
+  margin: 0 0 0.75rem 0;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.7;
+}
+
+.markdown-body .toc ul {
+  margin: 0;
+  padding-left: 1.25rem;
+}
+
+.markdown-body .toc li {
+  margin: 0.35rem 0;
+}
+
+.markdown-body .toc a {
+  font-size: 0.95rem;
 }
 
 .markdown-body blockquote {

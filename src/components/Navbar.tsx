@@ -26,7 +26,7 @@ export const Navbar: React.FC = () => {
             <NavLink to="/" end className={({ isActive }) => isActive ? 'active' : ''}>Spec</NavLink>
             <NavLink to="/playground" className={({ isActive }) => isActive ? 'active' : ''}>Playground</NavLink>
             <NavLink to="/sdks" className={({ isActive }) => isActive ? 'active' : ''}>SDKs</NavLink>
-            <NavLink to="/blog" className={({ isActive }) => isActive ? 'active' : ''}>Blog</NavLink>
+            {/* <NavLink to="/blog" className={({ isActive }) => isActive ? 'active' : ''}>Blog</NavLink> */}
           </div>
         </div>
 
