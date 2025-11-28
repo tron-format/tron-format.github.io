@@ -1,10 +1,11 @@
-import React, { useState, useMemo, useRef } from 'react';
+import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { encodingForModel, Tiktoken } from 'js-tiktoken';
 import { TRON } from '@tron-format/tron';
 import * as TOON from '@toon-format/toon';
 import { stringify as yamlStringify } from 'yaml';
 import { Copy, Check, Shield, BarChart3 } from 'lucide-react';
-import { presets, type Dataset } from '../lib/datasets';
+import type { Dataset } from '../datasets/types';
+import presets from '../datasets/presets';
 import { DatasetDropdown, DatasetSourceInfo } from './DatasetDropdown';
 import { TokenComparisonChart, type Format, type ComparisonData } from './TokenComparisonChart';
 
@@ -34,11 +35,8 @@ interface ColoredToken {
   color: string;
 }
 
-// Tokenize text and assign colors to each token
-const tokenizeWithColors = (text: string, enc: Tiktoken | null): ColoredToken[] => {
-  if (!enc) return [{ text, color: 'inherit' }];
-  
-  const tokenIds = enc.encode(text);
+// Convert pre-computed token IDs to colored tokens (avoids re-encoding)
+const tokenIdsToColoredTokens = (tokenIds: number[], enc: Tiktoken): ColoredToken[] => {
   const result: ColoredToken[] = [];
   
   for (let i = 0; i < tokenIds.length; i++) {
@@ -169,18 +167,41 @@ const CopyButton: React.FC<{ text: string }> = ({ text }) => {
   );
 };
 
+const defaultCustomData = {
+  "example": "Paste your JSON here"
+}
+
 export const PlaygroundPage: React.FC = () => {
   const [dataMode, setDataMode] = useState<DataMode>('presets');
   const [selectedDataset, setSelectedDataset] = useState<Dataset>(presets[0]);
-  const [customJson, setCustomJson] = useState<string>('"Paste your JSON here"');
+  const [customJson, setCustomJson] = useState<string>(JSON.stringify(defaultCustomData, null, 2));
   const [baselineFormat, setBaselineFormat] = useState<Format>('json');
   const [enabledFormats, setEnabledFormats] = useState<Set<Format>>(
     new Set(['json', 'pretty-json', 'tron', 'toon'])
   );
   const [showTokenHighlighting, setShowTokenHighlighting] = useState(true);
+  const [enc, setEnc] = useState<Tiktoken | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
   
   // Use ref to track last valid custom data
-  const lastValidCustomDataRef = useRef<unknown>("Paste your JSON here");
+  const lastValidCustomDataRef = useRef<unknown>(defaultCustomData);
+
+  // Initialize tokenizer asynchronously to avoid blocking the UI
+  useEffect(() => {
+    const initTokenizer = async () => {
+      // Small delay to ensure the loading UI renders first
+      await new Promise(resolve => setTimeout(resolve, 0));
+      try {
+        const encoder = encodingForModel("gpt-5");
+        setEnc(encoder);
+      } catch (e) {
+        console.error("Failed to load tokenizer:", e);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    initTokenizer();
+  }, []);
 
   const toggleFormat = (formatId: Format) => {
     setEnabledFormats(prev => {
@@ -193,15 +214,6 @@ export const PlaygroundPage: React.FC = () => {
       return next;
     });
   };
-
-  const enc = useMemo(() => {
-    try {
-      return encodingForModel("gpt-5");
-    } catch (e) {
-      console.error("Failed to load tokenizer:", e);
-      return null;
-    }
-  }, []);
 
   // Parse custom JSON and get current valid data + error
   const { customData, customJsonError } = useMemo(() => {
@@ -238,27 +250,62 @@ export const PlaygroundPage: React.FC = () => {
     }
   };
 
-  const results = useMemo(() => {
-    if (activeData === undefined) return null;
+  // Pre-compute token data for all presets (only re-runs when enc changes)
+  // Stores full tokenIds so we can reuse them for both charts and code blocks
+  const presetTokenData = useMemo(() => {
+    if (!enc) return null;
     
-    const baselineText = getFormattedString(activeData, baselineFormat);
-    const baselineTokens = enc ? enc.encode(baselineText).length : 0;
+    return presets.map(preset => {
+      const formatResults = FORMATS.map(fmt => {
+        const text = getFormattedString(preset.data, fmt.id);
+        const tokenIds = enc.encode(text);
+        return { ...fmt, text, tokenIds, tokens: tokenIds.length };
+      });
+      const maxTokens = Math.max(...formatResults.map(r => r.tokens));
+      return { dataset: preset, formatResults, maxTokens };
+    });
+  }, [enc]);
 
-    return FORMATS.map((fmt) => {
-      const text = getFormattedString(activeData, fmt.id);
-      const tokens = enc ? enc.encode(text).length : 0;
-      const diff = baselineTokens > 0 ? ((tokens - baselineTokens) / baselineTokens) * 100 : 0;
-      const coloredTokens = tokenizeWithColors(text, enc);
+  const results = useMemo(() => {
+    if (activeData === undefined || !enc) return null;
+    
+    let formatData: { id: Format; label: string; text: string; tokenIds: number[]; tokens: number }[];
+    
+    // Reuse pre-computed token data for preset datasets
+    if (dataMode === 'presets' && presetTokenData) {
+      const presetEntry = presetTokenData.find(p => p.dataset === selectedDataset);
+      if (presetEntry) {
+        formatData = presetEntry.formatResults;
+      } else {
+        // Fallback: compute fresh (shouldn't happen for valid presets)
+        formatData = FORMATS.map((fmt) => {
+          const text = getFormattedString(activeData, fmt.id);
+          const tokenIds = enc.encode(text);
+          return { ...fmt, text, tokenIds, tokens: tokenIds.length };
+        });
+      }
+    } else {
+      // Compute fresh for custom data
+      formatData = FORMATS.map((fmt) => {
+        const text = getFormattedString(activeData, fmt.id);
+        const tokenIds = enc.encode(text);
+        return { ...fmt, text, tokenIds, tokens: tokenIds.length };
+      });
+    }
+    
+    const baselineTokenCount = formatData.find(f => f.id === baselineFormat)!.tokens;
+
+    return formatData.map((fmt) => {
+      const diff = baselineTokenCount > 0 ? ((fmt.tokens - baselineTokenCount) / baselineTokenCount) * 100 : 0;
+      const coloredTokens = tokenIdsToColoredTokens(fmt.tokenIds, enc);
       
       return {
         ...fmt,
-        text,
-        tokens,
         diff,
         coloredTokens,
       };
     });
-  }, [activeData, baselineFormat, enc]);
+  }, [activeData, baselineFormat, enc, dataMode, selectedDataset, presetTokenData]);
 
   const formatDiff = (diff: number) => {
     if (diff === 0) return '0%';
@@ -272,23 +319,15 @@ export const PlaygroundPage: React.FC = () => {
     return '#22c55e'; // Green for decrease
   };
 
-  // Calculate token comparison data for all presets
+  // Calculate comparison data with diff percentages (re-runs when baseline changes)
   const presetComparisons = useMemo((): ComparisonData[] | null => {
-    if (!enc) return null;
+    if (!presetTokenData) return null;
     
-    return presets.map(preset => {
-      const formatResults = FORMATS.map(fmt => {
-        const text = getFormattedString(preset.data, fmt.id);
-        const tokens = enc.encode(text).length;
-        return { ...fmt, tokens };
-      });
-      
-      const baselineResult = formatResults.find(r => r.id === baselineFormat)!;
-      const baselineTokens = baselineResult.tokens;
-      const maxTokens = Math.max(...formatResults.map(r => r.tokens));
+    return presetTokenData.map(({ dataset, formatResults, maxTokens }) => {
+      const baselineTokens = formatResults.find(r => r.id === baselineFormat)!.tokens;
       
       return {
-        dataset: preset,
+        dataset,
         results: formatResults.map(r => ({
           ...r,
           diff: baselineTokens > 0 ? ((r.tokens - baselineTokens) / baselineTokens) * 100 : 0,
@@ -297,7 +336,29 @@ export const PlaygroundPage: React.FC = () => {
         maxTokens,
       };
     });
-  }, [enc, baselineFormat]);
+  }, [presetTokenData, baselineFormat]);
+
+  // Show loading state while tokenizer is initializing
+  if (isLoading) {
+    return (
+      <div className="markdown-body" style={{ maxWidth: '1400px' }}>
+        <div style={{ 
+          display: 'flex', 
+          alignItems: 'center', 
+          justifyContent: 'center', 
+          minHeight: '60vh',
+        }}>
+          <div style={{ 
+            fontSize: '1.1rem', 
+            color: 'var(--text-color)',
+            opacity: 0.7,
+          }}>
+            Loading...
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="markdown-body" style={{ maxWidth: '1400px' }}>
@@ -590,7 +651,7 @@ export const PlaygroundPage: React.FC = () => {
             opacity: 0.8,
             fontSize: '0.95rem',
           }}>
-            Compare how each format performs across different dataset types. Lower token counts mean more efficient representation.
+            Compare how each format performs across different dataset types. Lower token counts mean more efficient data representation and lower costs for sending to AI models!
           </p>
           <div style={{ 
             display: 'grid', 

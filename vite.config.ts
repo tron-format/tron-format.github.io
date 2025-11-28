@@ -16,6 +16,7 @@ export default defineConfig({
         manualChunks: {
           'vendor-markdown': ['react-markdown', 'remark-gfm'],
           'vendor-rehype': ['rehype-highlight', 'rehype-raw'],
+          'vendor-tiktoken': ['js-tiktoken'],
         },
       },
     },

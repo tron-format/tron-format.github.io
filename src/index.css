@@ -220,6 +220,10 @@ nav {
   gap: 2rem;
 }
 
+.nav-right {
+  gap: 0.5rem;
+}
+
 nav .logo {
   font-weight: bold;
   font-size: 1.2rem;
@@ -261,7 +265,7 @@ nav a.active {
    but we use 'end' prop on NavLink for logo/home usually. 
    Actually, logo is separate now. */
 
-button.theme-toggle, button.hamburger {
+button.theme-toggle, button.hamburger, .github-link {
   background: transparent;
   border: none;
   color: var(--text-color);
@@ -274,8 +278,12 @@ button.theme-toggle, button.hamburger {
   transition: background-color 0.2s;
 }
 
-button.theme-toggle:hover, button.hamburger:hover {
+button.theme-toggle:hover, button.hamburger:hover, .github-link:hover {
   background-color: var(--code-bg);
+}
+
+.nav-right .github-link:hover {
+  color: var(--text-color);
 }
 
 /* Mobile Styles */

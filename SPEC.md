@@ -64,7 +64,7 @@ Order(
   109.96
 )
 ```
-<span class="code-footnote">80 tokens for OpenAI models (65 tokens if fully compressed)</span>
+<span class="code-footnote">80 tokens for OpenAI models (64 tokens if fully compressed)</span>
 
 </td>
 </tr>
@@ -228,6 +228,55 @@ class Profile: name, email
 User(1, Profile("Alice", "alice@example.com"))
 ```
 
+### Named Arguments
+
+Arguments can also be assigned by name using the `name=value` syntax. This allows arguments to be provided in any order.
+
+```python
+class MyClass: a, b
+
+MyClass(a=1, b=2)    # Equivalent to MyClass(1, 2)
+MyClass(b=2, a=1)    # Also equivalent to MyClass(1, 2)
+```
+
+**Mixed Positional and Named Arguments:**
+
+Named arguments can follow positional arguments, but positional arguments **cannot** follow named arguments.
+
+```python
+class MyClass: a, b
+
+MyClass(1, b=2)      # Valid: positional 'a', named 'b'
+MyClass(a=1, 2)      # Invalid: positional after named (SyntaxError)
+```
+
+**Argument Name Rules:**
+
+*   Argument names can be unquoted if they contain only letters, numbers, or underscores.
+*   Argument names can be quoted: `"a"=1` is equivalent to `a=1`.
+*   Each argument name must be a valid property defined in the class (SyntaxError otherwise).
+*   Each argument name can only appear once (SyntaxError for duplicates).
+*   All properties must be assigned, either positionally or by name (SyntaxError if any are missing).
+
+**Examples:**
+
+```python
+class Point: x, y
+
+# All equivalent
+Point(10, 20)
+Point(x=10, y=20)
+Point(y=20, x=10)
+Point(10, y=20)
+Point("x"=10, "y"=20)  # quoted property names allowed
+
+# Invalid examples (all raise SyntaxError)
+Point(x=10)            # missing 'y'
+Point(x=10, y=20, z=30) # 'z' is not a property
+Point(x=10, x=20)      # duplicate 'x'
+Point(x=10, 20)        # positional after named
+```
+
 ### Trailing Commas
 
 Unlike JSON, TRON allows an optional trailing comma after the last item in:
@@ -246,3 +295,63 @@ Whitespace is generally insignificant, except:
     * a semicolon is not used to separate the header and data sections.
 
 When separating property names with newlines, it is strongly recommended to use consistent indentation for readability. However, identation is not required since a property and a class instantiated object can be differentiated based on whether the unquoted indentifier is followed by a left bracket.
+
+## 7. Best Practices
+
+The following are best practices for encoding data in TRON.
+
+### Notes on Readability
+
+The features that TRON adds beyond JSON are primarily focused on LLM token efficiency rather than human readability. If human readability is preferred, continue to encode data as JSON with indentation.
+
+Although TRON supports named arguments for improved readability, this feature is intended to support annotating existing TRON files by hand if desired. SDKs that implement TRON encoding should avoid adding named arguments programmatically to class instantiated objects.
+
+### Token Efficient Data Representation
+
+When defining a set of named items, it is recommended to represent them as a list of objects instead of key-value pairs where the key is the name and the value is the item. This results in better token efficiency when encoding the data as TRON.
+
+For instance, instead of representing the data like this:
+
+```json
+{
+  "name1": {
+    "prop1": "value1",
+    "prop2": "value2"
+  },
+  "name2": {
+    "prop1": "value1",
+    "prop2": "value2"
+  }
+}
+```
+
+you should represent it like this if possible:
+
+```json
+[
+  {
+    "name": "name1",
+    "prop1": "value1",
+    "prop2": "value2"
+  },
+  {
+    "name": "name2",
+    "prop1": "value1",
+    "prop2": "value2"
+  }
+]
+```
+
+### Token Efficient Encoding Strategies
+
+SDKs that implement TRON encoding should aim to minimize the number of tokens by default. Here are some simple tips to achieve this:
+*   Use letters A-Z for class names. After the first 26 classes, use A1-Z1, A2-Z2, etc.
+*   Use either JSON syntax or class instantiation based on the number of properties and occurrences of the object structure. The following strategy is mathematically proven to minimize the number of tokens for an array of uniform objects.
+    *   If an object structure has only one property, encode with JSON syntax without defining a class (i.e., do `{"property": "value"}` instead of `A("value")`).
+    *   If an object structure has two properties and it only occurs once, encode with JSON syntax without defining a class.
+    *   If an object structure has two properties and occurs multiple times, define a class and encode with class instantiation.
+    *   If an object structure has three or more properties, always define a class and encode with class instantiation.
+
+In addition, the following are some more advanced tips to achieve even better token efficiency, though they may come with some trade-offs:
+*   Define the class definitions by their number of instantiations in descending order. For instance, use "A" for the most frequent object, "B" for the second most frequent, etc. However, this may make the ordering of the class definitions seem random and less intuitive when compared to the JSON representation.
+*   Pick class names from a large set of single token words instead of using A-Z, A1-Z1, A2-Z2, etc. However, this does not guarantee an infinite choice of class names if you attempt to always use one token per class name.

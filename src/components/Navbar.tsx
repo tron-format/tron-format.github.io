@@ -31,6 +31,21 @@ export const Navbar: React.FC = () => {
         </div>
 
         <div className="nav-right">
+          <a 
+            href="https://github.com/tron-format/tron-format.github.io" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="github-link"
+            aria-label="GitHub repository"
+          >
+            <img 
+              src="https://github.com/fluidicon.png" 
+              alt="GitHub" 
+              width={22} 
+              height={22}
+              style={{ borderRadius: '50%' }}
+            />
+          </a>
           <button 
             onClick={toggleTheme} 
             className="theme-toggle desktop-theme-toggle"

@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { ChevronDown, ExternalLink, Calendar } from 'lucide-react';
-import type { Dataset } from '../lib/datasets';
+import type { Dataset } from '../datasets/types';
 
 // Custom Dataset Dropdown with label + description
 export const DatasetDropdown: React.FC<{

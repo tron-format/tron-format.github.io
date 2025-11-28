@@ -1,5 +1,5 @@
 import React from 'react';
-import type { Dataset } from '../lib/datasets';
+import type { Dataset } from '../datasets/types';
 
 export type Format = 'json' | 'pretty-json' | 'yaml' | 'toon' | 'tron';
 
