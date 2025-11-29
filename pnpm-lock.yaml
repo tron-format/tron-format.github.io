@@ -12,8 +12,8 @@ importers:
         specifier: ^2.0.0
         version: 2.0.0
       '@tron-format/tron':
-        specifier: github:tron-format/tron-javascript
-        version: https://codeload.github.com/tron-format/tron-javascript/tar.gz/571748e75c8792e806e129a5a232f2a71927849f
+        specifier: ^0.1.3
+        version: 0.1.3
       highlight.js:
         specifier: ^11.11.1
         version: 11.11.1
@@ -527,9 +527,8 @@ packages:
   '@toon-format/toon@2.0.0':
     resolution: {integrity: sha512-7lIVGzCZ9MzKKcbWOumUO4CXB1owpAwDhvDzpjmyqT0B8l9fROMyEMeSubJrGc8y0IxpGZgwt/8PpCOVLiB7UA==}
 
-  '@tron-format/tron@https://codeload.github.com/tron-format/tron-javascript/tar.gz/571748e75c8792e806e129a5a232f2a71927849f':
-    resolution: {tarball: https://codeload.github.com/tron-format/tron-javascript/tar.gz/571748e75c8792e806e129a5a232f2a71927849f}
-    version: 0.1.3-beta.0
+  '@tron-format/tron@0.1.3':
+    resolution: {integrity: sha512-7rQAHdS5QSBMvQuh5M0Vwd/Pc0Dk3vlQa3NfYDh7AAtyNdIJpQMqhz4Gxw95gPPvq156iuR6z0WyfFTt8PEtSA==}
 
   '@types/babel__core@7.20.5':
     resolution: {integrity: sha512-qoQprZvz5wQFJwMDqeseRXWv3rqMvhgpbXFfVyWhbx9X47POIA6i/+dXefEmZKoAgOaTdaIgNSMqMIU61yRyzA==}
@@ -1928,7 +1927,7 @@ snapshots:
 
   '@toon-format/toon@2.0.0': {}
 
-  '@tron-format/tron@https://codeload.github.com/tron-format/tron-javascript/tar.gz/571748e75c8792e806e129a5a232f2a71927849f': {}
+  '@tron-format/tron@0.1.3': {}
 
   '@types/babel__core@7.20.5':
     dependencies:

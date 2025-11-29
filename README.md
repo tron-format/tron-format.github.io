@@ -1,8 +1,13 @@
 # TRON Format Website
 
+[![CI](https://github.com/tron-format/tron-format.github.io/actions/workflows/deploy.yml/badge.svg)](https://github.com/tron-format/tron-format.github.io)
+[![License: MIT](https://img.shields.io/badge/license-MIT-fef3c0?labelColor=1b1b1f)](./LICENSE)
+
 This repository contains the source code for the official website of **TRON (Token Reduced Object Notation)**.
 
 See the website at [https://tron-format.github.io/](https://tron-format.github.io/).
+
+Check out the [Playground](https://tron-format.github.io/#/playground) in the website to try out TRON with your own data!
 
 ## What is TRON?
 
