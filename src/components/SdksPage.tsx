@@ -32,7 +32,7 @@ const sdksByLanguage: LanguageSDKs[] = [
   },
 ];
 
-const upcomingLanguages = ["Python", "Rust"];
+// const upcomingLanguages = ["Python", "Rust"];
 
 export const SdksPage: React.FC = () => {
   return (
@@ -67,9 +67,11 @@ export const SdksPage: React.FC = () => {
       ))}
 
       <h2 id="upcoming-support">Upcoming Support</h2>
-        {upcomingLanguages.map((lang) => (
+        {/* {upcomingLanguages.map((lang) => (
           <p key={lang}><strong>{lang}</strong>: Coming soon</p>
-        ))}
+        ))} */}
+        <p>No additional languages are planned for upcoming support at this time.</p>
+        <p>Please <a href="https://forms.gle/j5ato4edPisYSwgA6" target="_blank" rel="noopener noreferrer">click here</a> if you would like to request support for a new language.</p>
     </div>
   );
 };
