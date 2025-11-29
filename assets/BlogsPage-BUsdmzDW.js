@@ -1,1 +1,0 @@
-import{l as t}from"./vendor-markdown-0Lbspi3Y.js";import{c as r}from"./index-wptqKBai.js";const c=()=>{const o=r.c(1);let e;return o[0]===Symbol.for("react.memo_cache_sentinel")?(e=t.jsxs("div",{className:"markdown-body",children:[t.jsx("h1",{children:"Blog"}),t.jsx("p",{children:"Stay tuned for updates and articles about TRON."})]}),o[0]=e):e=o[0],e};export{c as BlogsPage};

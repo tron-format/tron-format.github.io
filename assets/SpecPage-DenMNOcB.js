@@ -1,4 +1,4 @@
-import{l as t,M as a,m as s}from"./vendor-markdown-0Lbspi3Y.js";import{c as o}from"./index-wptqKBai.js";import{r as i,a as r}from"./vendor-rehype-Bm58czek.js";const l=`# TRON Specification
+import{l as t,M as a,m as s}from"./vendor-markdown-0Lbspi3Y.js";import{c as o}from"./index-CxBWquug.js";import{r as i,a as r}from"./vendor-rehype-Bm58czek.js";const l=`# TRON Specification
 
 TRON (Token Reduced Object Notation) is a data serialization format that extends JSON. It is designed to be more compact by allowing the definition of "classes" (schemas) for objects, reducing the repetition of property names. TRON is a superset of JSON, meaning any valid JSON is also valid TRON.
 
@@ -346,13 +346,15 @@ you should represent it like this if possible:
 
 SDKs that implement TRON encoding should aim to minimize the number of tokens by default. Here are some simple tips to achieve this:
 *   Use letters A-Z for class names. After the first 26 classes, use A1-Z1, A2-Z2, etc.
-*   Use either JSON syntax or class instantiation based on the number of properties and occurrences of the object structure. The following strategy is mathematically proven to minimize the number of tokens for an array of uniform objects.
-    *   If an object structure has only one property, encode with JSON syntax without defining a class (i.e., do \`{"property": "value"}\` instead of \`A("value")\`).
-    *   If an object structure has two properties and it only occurs once, encode with JSON syntax without defining a class.
-    *   If an object structure has two properties and occurs multiple times, define a class and encode with class instantiation.
-    *   If an object structure has three or more properties, always define a class and encode with class instantiation.
+*   Use either JSON syntax or class instantiation based on the number of properties and occurrences of the object structure. The following strategy tends to be most practical for achieving fewer tokens than pure JSON encoding in most cases.
+    *   If an object structure has only one property OR only occurs once, encode with JSON syntax without defining a class (i.e., do \`{"property": "value"}\` instead of \`A("value")\`).
+    *   Otherwise (if an object structure has more than one property AND more than occurrences), define a class and encode each occurrence with class instantiation.
+*   Although the strategy above has higher potential to achieve more token reduction, it does not always guarantee fewer tokens than pure JSON encoding. The following strategy is mathematically proven to always result in fewer (or equal) tokens than pure JSON encoding, but has a lower potential for a large percentage in token reduction:
+    *   Let \`x\` be the number of properties in the object structure, and \`n\` be the number of occurrences of the object structure.
+    *   If \`x > 1\` and \`n > (2x + 3) / (2x - 2)\` for the object structure, define a class and encode each occurrence with class instantiation. Otherwise, encode with JSON syntax without defining a class.
+    *   Note that this strategy is more difficult to unit test for little to no benefit over the first strategy in most cases.
 
-In addition, the following are some more advanced tips to achieve even better token efficiency, though they may come with some trade-offs:
-*   Define the class definitions by their number of instantiations in descending order. For instance, use "A" for the most frequent object, "B" for the second most frequent, etc. However, this may make the ordering of the class definitions seem random and less intuitive when compared to the JSON representation.
+In addition, the following are more ideas to achieve even better token efficiency, though they come with some trade-offs:
+*   Define the class definitions in descending order by their occurrence. For instance, use "A" for the most frequent object, "B" for the second most frequent, etc. However, this may make the ordering of the class definitions seem random and less intuitive when compared to the JSON representation, and is only beneficial if there are more than 26 classes.
 *   Pick class names from a large set of single token words instead of using A-Z, A1-Z1, A2-Z2, etc. However, this does not guarantee an infinite choice of class names if you attempt to always use one token per class name.
 `,p=()=>{const e=o.c(1);let n;return e[0]===Symbol.for("react.memo_cache_sentinel")?(n=t.jsx("div",{className:"markdown-body",children:t.jsx(a,{remarkPlugins:[s],rehypePlugins:[i,r],children:l})}),e[0]=n):n=e[0],n};export{p as SpecPage};
