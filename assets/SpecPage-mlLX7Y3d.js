@@ -1,4 +1,4 @@
-import{l as t,M as a,m as s}from"./vendor-markdown-0Lbspi3Y.js";import{c as o}from"./index-DFFbxU-2.js";import{r as i,a as r}from"./vendor-rehype-Bm58czek.js";const l=`# TRON Specification
+import{l as t,M as a,m as s}from"./vendor-markdown-0Lbspi3Y.js";import{c as o}from"./index-B-XHX4GS.js";import{r as i,a as r}from"./vendor-rehype-Bm58czek.js";const l=`# TRON Specification
 
 TRON (Token Reduced Object Notation) is a data serialization format that extends JSON. It is designed to be more compact by allowing the definition of "classes" (schemas) for objects, reducing the repetition of property names. TRON is a superset of JSON, meaning any valid JSON is also valid TRON.
 
